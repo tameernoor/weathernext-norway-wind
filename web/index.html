@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Norway Wind Forecast</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Norway's wind farms, the next 48 hours</h1>
+    <p id="status">Loading…</p>
+    <label id="time-control" hidden>
+      <span id="time-label"></span>
+      <input id="time-slider" type="range" min="0" value="0">
+    </label>
+    <p class="legend">
+      Dot size = installed MW · colour = expected output (median forecast) ·
+      halo = how much the 64 forecasts disagree
+    </p>
+  </header>
+  <div id="map"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

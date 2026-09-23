@@ -1,0 +1,54 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  font: 15px/1.4 system-ui, sans-serif;
+  color: #1c2430;
+  background: #f5f6f8;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 12px 16px;
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 20px;
+}
+
+header p {
+  margin: 4px 0;
+}
+
+.legend {
+  color: #5a6472;
+  font-size: 13px;
+}
+
+#time-control {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#time-control[hidden] {
+  display: none;
+}
+
+#time-slider {
+  flex: 1;
+  max-width: 480px;
+}
+
+#map {
+  flex: 1;
+}
+
+.band-chart text {
+  font-size: 10px;
+  fill: #5a6472;
+}

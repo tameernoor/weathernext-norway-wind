@@ -1,0 +1,35 @@
+[project]
+name = "weathernext-norway-wind"
+version = "0.1.0"
+description = "WeatherNext 3 hub-height wind forecasts for Norway's wind farms, on a map."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies = [
+    "google-cloud-bigquery>=3.25",
+    "requests>=2.32",
+]
+
+[project.scripts]
+wnw = "weathernext_norway_wind.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

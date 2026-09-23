@@ -1,0 +1,1226 @@
+{
+ "type": "FeatureCollection",
+ "attribution": "Norwegian Water Resources and Energy Directorate (NVE), NLOD",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     20.10762929975084,
+     70.10230226366498
+    ]
+   },
+   "properties": {
+    "id": 9333,
+    "name": "Fakken",
+    "capacity_mw": 54.0,
+    "hub_height_m": 80.0,
+    "turbines": 18,
+    "price_area": "NO4",
+    "municipality": "Karlsøy",
+    "county": "Troms"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.800895534960043,
+     63.51971428863519
+    ]
+   },
+   "properties": {
+    "id": 9464,
+    "name": "Hitra",
+    "capacity_mw": 55.2,
+    "hub_height_m": 70.0,
+    "turbines": 24,
+    "price_area": "NO3",
+    "municipality": "Hitra",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     27.268162736189524,
+     70.92197527783172
+    ]
+   },
+   "properties": {
+    "id": 9574,
+    "name": "Kjøllefjord",
+    "capacity_mw": 39.1,
+    "hub_height_m": 70.0,
+    "turbines": 17,
+    "price_area": "NO4",
+    "municipality": "Lebesby",
+    "county": "Finnmark"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.37978343235527,
+     59.92929639518118
+    ]
+   },
+   "properties": {
+    "id": 9588,
+    "name": "Midtfjellet",
+    "capacity_mw": 149.6,
+    "hub_height_m": 82.2,
+    "turbines": 55,
+    "price_area": "NO2",
+    "municipality": "Fitjar",
+    "county": "Vestland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     7.922752674763091,
+     63.4074015081648
+    ]
+   },
+   "properties": {
+    "id": 9591,
+    "name": "Smøla",
+    "capacity_mw": 145.8,
+    "hub_height_m": 70.0,
+    "turbines": 66,
+    "price_area": "NO3",
+    "municipality": "Smøla",
+    "county": "Møre og Romsdal"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.754024744426908,
+     58.64644471159537
+    ]
+   },
+   "properties": {
+    "id": 9613,
+    "name": "Høg-Jæren",
+    "capacity_mw": 73.6,
+    "hub_height_m": 80.0,
+    "turbines": 32,
+    "price_area": "NO2",
+    "municipality": "Hå, Time",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.942891374825707,
+     58.586624285114056
+    ]
+   },
+   "properties": {
+    "id": 9726,
+    "name": "Bjerkreim",
+    "capacity_mw": 155.4,
+    "hub_height_m": 125.0,
+    "turbines": 37,
+    "price_area": "NO2",
+    "municipality": "Bjerkreim",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.768180905637783,
+     63.501161831291974
+    ]
+   },
+   "properties": {
+    "id": 9737,
+    "name": "Hitra 2",
+    "capacity_mw": 93.6,
+    "hub_height_m": 87.0,
+    "turbines": 26,
+    "price_area": "NO3",
+    "municipality": "Hitra",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.09265507777162,
+     64.07258500466067
+    ]
+   },
+   "properties": {
+    "id": 9776,
+    "name": "Harbaksfjellet",
+    "capacity_mw": 126.0,
+    "hub_height_m": 87.0,
+    "turbines": 30,
+    "price_area": "NO3",
+    "municipality": "Åfjord",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.681836050669707,
+     58.15566449935221
+    ]
+   },
+   "properties": {
+    "id": 9787,
+    "name": "Lista",
+    "capacity_mw": 71.3,
+    "hub_height_m": 80.0,
+    "turbines": 31,
+    "price_area": "NO2",
+    "municipality": "Farsund",
+    "county": "Agder"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     17.878430319174907,
+     68.50390844215516
+    ]
+   },
+   "properties": {
+    "id": 9788,
+    "name": "Nygårdsfjellet",
+    "capacity_mw": 32.2,
+    "hub_height_m": 82.8,
+    "turbines": 14,
+    "price_area": "NO4",
+    "municipality": "Narvik",
+    "county": "Nordland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.904825382909285,
+     59.31569655019061
+    ]
+   },
+   "properties": {
+    "id": 9790,
+    "name": "Utsira",
+    "capacity_mw": 1.2,
+    "hub_height_m": 46.0,
+    "turbines": 2,
+    "price_area": "NO2",
+    "municipality": "Utsira",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     24.589283320987846,
+     71.01190245098945
+    ]
+   },
+   "properties": {
+    "id": 9792,
+    "name": "Havøygavlen",
+    "capacity_mw": 40.8,
+    "hub_height_m": 89.9,
+    "turbines": 10,
+    "price_area": "NO4",
+    "municipality": "Måsøy",
+    "county": "Finnmark"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     11.37455792385135,
+     64.7574727245658
+    ]
+   },
+   "properties": {
+    "id": 9794,
+    "name": "Hundhammerfjellet",
+    "capacity_mw": 55.0,
+    "hub_height_m": 86.3,
+    "turbines": 14,
+    "price_area": "NO3",
+    "municipality": "Nærøysund",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     4.9615456852394315,
+     61.25097977611598
+    ]
+   },
+   "properties": {
+    "id": 9811,
+    "name": "Lutelandet",
+    "capacity_mw": 51.3,
+    "hub_height_m": 105.0,
+    "turbines": 9,
+    "price_area": "NO3",
+    "municipality": "Fjaler",
+    "county": "Vestland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.029746884333854,
+     59.14012307594302
+    ]
+   },
+   "properties": {
+    "id": 9864,
+    "name": "Zephyros",
+    "capacity_mw": 2.3,
+    "hub_height_m": 70.0,
+    "turbines": 1,
+    "price_area": "NO2",
+    "municipality": "Karmøy",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.629985106268759,
+     63.819816531053995
+    ]
+   },
+   "properties": {
+    "id": 9890,
+    "name": "Valsneset",
+    "capacity_mw": 11.5,
+    "hub_height_m": 64.0,
+    "turbines": 5,
+    "price_area": "NO3",
+    "municipality": "Ørland",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.753568460380744,
+     58.73701165873895
+    ]
+   },
+   "properties": {
+    "id": 9892,
+    "name": "Åsen II",
+    "capacity_mw": 1.6,
+    "hub_height_m": 65.0,
+    "turbines": 2,
+    "price_area": "NO2",
+    "municipality": "Time",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.888848877430108,
+     64.90148183064446
+    ]
+   },
+   "properties": {
+    "id": 9893,
+    "name": "Ytre Vikna",
+    "capacity_mw": 39.1,
+    "hub_height_m": 64.0,
+    "turbines": 17,
+    "price_area": "NO3",
+    "municipality": "Nærøysund",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     29.041696907408976,
+     70.75502044612949
+    ]
+   },
+   "properties": {
+    "id": 9894,
+    "name": "Raggovidda 2",
+    "capacity_mw": 51.6,
+    "hub_height_m": 80.0,
+    "turbines": 12,
+    "price_area": "NO4",
+    "municipality": "Berlevåg",
+    "county": "Finnmark"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     8.656073477051581,
+     63.694113579521726
+    ]
+   },
+   "properties": {
+    "id": 9897,
+    "name": "Frøya",
+    "capacity_mw": 58.8,
+    "hub_height_m": 112.0,
+    "turbines": 14,
+    "price_area": "NO3",
+    "municipality": "Frøya",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     9.495063329030103,
+     63.36078322488745
+    ]
+   },
+   "properties": {
+    "id": 9899,
+    "name": "Geitfjellet",
+    "capacity_mw": 180.6,
+    "hub_height_m": 87.0,
+    "turbines": 43,
+    "price_area": "NO3",
+    "municipality": "Heim, Orkland",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     18.220728020068115,
+     69.59096724765043
+    ]
+   },
+   "properties": {
+    "id": 9909,
+    "name": "Raudfjell",
+    "capacity_mw": 84.0,
+    "hub_height_m": 85.0,
+    "turbines": 20,
+    "price_area": "NO4",
+    "municipality": "Tromsø",
+    "county": "Troms"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.860729874714659,
+     58.58695538926201
+    ]
+   },
+   "properties": {
+    "id": 9914,
+    "name": "Skinansfjellet og Gravdal",
+    "capacity_mw": 138.6,
+    "hub_height_m": 125.0,
+    "turbines": 33,
+    "price_area": "NO2",
+    "municipality": "Bjerkreim, Hå",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     29.71101671316259,
+     70.67210936128085
+    ]
+   },
+   "properties": {
+    "id": 9970,
+    "name": "Hamnefjell",
+    "capacity_mw": 51.75,
+    "hub_height_m": 84.0,
+    "turbines": 15,
+    "price_area": "NO4",
+    "municipality": "Båtsfjord",
+    "county": "Finnmark"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.087737287912028,
+     58.38342974822956
+    ]
+   },
+   "properties": {
+    "id": 9975,
+    "name": "Svåheia",
+    "capacity_mw": 25.2,
+    "hub_height_m": 87.0,
+    "turbines": 7,
+    "price_area": "NO2",
+    "municipality": "Eigersund",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.118075090619818,
+     63.41816142263258
+    ]
+   },
+   "properties": {
+    "id": 9998,
+    "name": "Rye Vind",
+    "capacity_mw": 0.225,
+    "hub_height_m": 31.0,
+    "turbines": 1,
+    "price_area": "NO3",
+    "municipality": "Trondheim",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.959136474620186,
+     58.66548648319405
+    ]
+   },
+   "properties": {
+    "id": 10015,
+    "name": "Stigafjellet",
+    "capacity_mw": 30.1,
+    "hub_height_m": 115.0,
+    "turbines": 7,
+    "price_area": "NO2",
+    "municipality": "Bjerkreim",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.917376685551208,
+     58.66629766299104
+    ]
+   },
+   "properties": {
+    "id": 10016,
+    "name": "Måkaknuten",
+    "capacity_mw": 94.6,
+    "hub_height_m": 125.0,
+    "turbines": 22,
+    "price_area": "NO2",
+    "municipality": "Bjerkreim, Gjesdal",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.226862891584241,
+     59.41585278130248
+    ]
+   },
+   "properties": {
+    "id": 10028,
+    "name": "Storøy",
+    "capacity_mw": 6.4,
+    "hub_height_m": 92.0,
+    "turbines": 2,
+    "price_area": "NO2",
+    "municipality": "Karmøy",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.432990576892313,
+     59.323025153085005
+    ]
+   },
+   "properties": {
+    "id": 10070,
+    "name": "Gismarvik",
+    "capacity_mw": 12.6,
+    "hub_height_m": 131.0,
+    "turbines": 3,
+    "price_area": "NO2",
+    "municipality": "Tysvær",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.002992776770068,
+     62.01534370659519
+    ]
+   },
+   "properties": {
+    "id": 10075,
+    "name": "Mehuken",
+    "capacity_mw": 25.3,
+    "hub_height_m": 64.0,
+    "turbines": 11,
+    "price_area": "NO3",
+    "municipality": "Kinn",
+    "county": "Vestland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     22.468380259593346,
+     70.63703476765932
+    ]
+   },
+   "properties": {
+    "id": 10097,
+    "name": "Dønnesfjord",
+    "capacity_mw": 14.1,
+    "hub_height_m": 69.0,
+    "turbines": 6,
+    "price_area": "NO4",
+    "municipality": "Hasvik",
+    "county": "Finnmark"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.244241130933959,
+     62.15914639963619
+    ]
+   },
+   "properties": {
+    "id": 10100,
+    "name": "Okla",
+    "capacity_mw": 21.0,
+    "hub_height_m": 90.0,
+    "turbines": 5,
+    "price_area": "NO3",
+    "municipality": "Stad",
+    "county": "Vestland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     11.727660693039144,
+     59.48702662407197
+    ]
+   },
+   "properties": {
+    "id": 10101,
+    "name": "Marker",
+    "capacity_mw": 54.0,
+    "hub_height_m": 142.0,
+    "turbines": 15,
+    "price_area": "NO1",
+    "municipality": "Marker",
+    "county": "Østfold"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     11.483261304843094,
+     60.34308326237625
+    ]
+   },
+   "properties": {
+    "id": 10121,
+    "name": "Odal",
+    "capacity_mw": 163.2,
+    "hub_height_m": 144.0,
+    "turbines": 34,
+    "price_area": "NO1",
+    "municipality": "Nord-Odal",
+    "county": "Innlandet"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.1978532554837855,
+     62.66594329604739
+    ]
+   },
+   "properties": {
+    "id": 10122,
+    "name": "Haram",
+    "capacity_mw": 33.6,
+    "hub_height_m": 82.0,
+    "turbines": 8,
+    "price_area": "NO3",
+    "municipality": "Haram",
+    "county": "Møre og Romsdal"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.910519761981582,
+     58.749594566549575
+    ]
+   },
+   "properties": {
+    "id": 10179,
+    "name": "Skurvenuten",
+    "capacity_mw": 6.9,
+    "hub_height_m": 92.0,
+    "turbines": 2,
+    "price_area": "NO2",
+    "municipality": "Gjesdal",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.948111717548607,
+     58.73035744823455
+    ]
+   },
+   "properties": {
+    "id": 10180,
+    "name": "Tindafjellet",
+    "capacity_mw": 10.35,
+    "hub_height_m": 92.0,
+    "turbines": 3,
+    "price_area": "NO2",
+    "municipality": "Gjesdal",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     15.259676336152586,
+     68.72402327877718
+    ]
+   },
+   "properties": {
+    "id": 10194,
+    "name": "Ånstadblåheia",
+    "capacity_mw": 50.4,
+    "hub_height_m": 87.0,
+    "turbines": 14,
+    "price_area": "NO4",
+    "municipality": "Sortland – Suortá",
+    "county": "Nordland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     12.193949692209554,
+     61.02414680826589
+    ]
+   },
+   "properties": {
+    "id": 10213,
+    "name": "Kjølberget",
+    "capacity_mw": 55.9,
+    "hub_height_m": 145.0,
+    "turbines": 13,
+    "price_area": "NO1",
+    "municipality": "Våler (Innlandet)",
+    "county": "Innlandet"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.298654149206774,
+     64.13922066215407
+    ]
+   },
+   "properties": {
+    "id": 10237,
+    "name": "Roan",
+    "capacity_mw": 255.6,
+    "hub_height_m": 87.0,
+    "turbines": 71,
+    "price_area": "NO3",
+    "municipality": "Åfjord",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.15664805912794,
+     64.04531073437431
+    ]
+   },
+   "properties": {
+    "id": 10238,
+    "name": "Kvenndalsfjellet",
+    "capacity_mw": 113.4,
+    "hub_height_m": 87.0,
+    "turbines": 27,
+    "price_area": "NO3",
+    "municipality": "Åfjord",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.159199054548786,
+     63.879271336944925
+    ]
+   },
+   "properties": {
+    "id": 10239,
+    "name": "Storheia",
+    "capacity_mw": 288.0,
+    "hub_height_m": 87.0,
+    "turbines": 80,
+    "price_area": "NO3",
+    "municipality": "Ørland, Åfjord",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.148969325600996,
+     61.794626152137376
+    ]
+   },
+   "properties": {
+    "id": 10253,
+    "name": "Hennøy",
+    "capacity_mw": 50.4,
+    "hub_height_m": 82.0,
+    "turbines": 12,
+    "price_area": "NO3",
+    "municipality": "Bremanger",
+    "county": "Vestland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.07449148859401,
+     61.684310458061105
+    ]
+   },
+   "properties": {
+    "id": 10254,
+    "name": "Guleslettene",
+    "capacity_mw": 197.4,
+    "hub_height_m": 90.0,
+    "turbines": 47,
+    "price_area": "NO3",
+    "municipality": "Kinn, Bremanger",
+    "county": "Vestland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.7274246909933115,
+     58.59055878968318
+    ]
+   },
+   "properties": {
+    "id": 10263,
+    "name": "Røyrmyra",
+    "capacity_mw": 2.4,
+    "hub_height_m": 65.0,
+    "turbines": 3,
+    "price_area": "NO2",
+    "municipality": "Hå",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     13.010702047570271,
+     65.85940219732012
+    ]
+   },
+   "properties": {
+    "id": 10269,
+    "name": "Øyfjellet",
+    "capacity_mw": 400.0,
+    "hub_height_m": 105.0,
+    "turbines": 72,
+    "price_area": "NO4",
+    "municipality": "Vefsn",
+    "county": "Nordland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.897495379425771,
+     58.835071154373914
+    ]
+   },
+   "properties": {
+    "id": 10277,
+    "name": "Vardafjellet",
+    "capacity_mw": 30.1,
+    "hub_height_m": 91.0,
+    "turbines": 7,
+    "price_area": "NO2",
+    "municipality": "Sandnes",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     11.201002293561816,
+     63.1335940422748
+    ]
+   },
+   "properties": {
+    "id": 10278,
+    "name": "Stokkfjellet",
+    "capacity_mw": 88.2,
+    "hub_height_m": 112.0,
+    "turbines": 21,
+    "price_area": "NO3",
+    "municipality": "Selbu",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.416738123480547,
+     64.21547612376511
+    ]
+   },
+   "properties": {
+    "id": 10292,
+    "name": "Skomakerfjellet",
+    "capacity_mw": 13.2,
+    "hub_height_m": 94.0,
+    "turbines": 4,
+    "price_area": "NO3",
+    "municipality": "Åfjord",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.706379667044597,
+     64.39458644388084
+    ]
+   },
+   "properties": {
+    "id": 10350,
+    "name": "Sørmarkfjellet",
+    "capacity_mw": 130.2,
+    "hub_height_m": 87.0,
+    "turbines": 31,
+    "price_area": "NO3",
+    "municipality": "Osen, Flatanger",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.08410711857729,
+     58.42618697886057
+    ]
+   },
+   "properties": {
+    "id": 10361,
+    "name": "Egersund",
+    "capacity_mw": 112.2,
+    "hub_height_m": 93.0,
+    "turbines": 33,
+    "price_area": "NO2",
+    "municipality": "Eigersund",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.792802758407887,
+     58.53154980641418
+    ]
+   },
+   "properties": {
+    "id": 10367,
+    "name": "Tonstad",
+    "capacity_mw": 208.3,
+    "hub_height_m": 129.0,
+    "turbines": 51,
+    "price_area": "NO2",
+    "municipality": "Flekkefjord, Sirdal",
+    "county": "Agder"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.877819978918413,
+     58.65673851041252
+    ]
+   },
+   "properties": {
+    "id": 10369,
+    "name": "Buheii",
+    "capacity_mw": 79.8,
+    "hub_height_m": 105.0,
+    "turbines": 19,
+    "price_area": "NO2",
+    "municipality": "Kvinesdal",
+    "county": "Agder"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     5.584034204330512,
+     59.3114569955661
+    ]
+   },
+   "properties": {
+    "id": 10374,
+    "name": "Tysvær",
+    "capacity_mw": 47.3,
+    "hub_height_m": 85.0,
+    "turbines": 11,
+    "price_area": "NO2",
+    "municipality": "Tysvær",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     16.667669977329442,
+     68.03248362070129
+    ]
+   },
+   "properties": {
+    "id": 10411,
+    "name": "Sørfjord",
+    "capacity_mw": 98.9,
+    "hub_height_m": 80.0,
+    "turbines": 23,
+    "price_area": "NO4",
+    "municipality": "Hamarøy",
+    "county": "Nordland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     10.374617567088155,
+     64.22481104165219
+    ]
+   },
+   "properties": {
+    "id": 10413,
+    "name": "Bessakerfjellet",
+    "capacity_mw": 57.5,
+    "hub_height_m": 64.0,
+    "turbines": 25,
+    "price_area": "NO3",
+    "municipality": "Åfjord",
+    "county": "Trøndelag"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     18.13360480557285,
+     69.58805778502382
+    ]
+   },
+   "properties": {
+    "id": 10414,
+    "name": "Kvitfjell",
+    "capacity_mw": 197.4,
+    "hub_height_m": 85.0,
+    "turbines": 47,
+    "price_area": "NO4",
+    "municipality": "Tromsø",
+    "county": "Troms"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     6.435691532209962,
+     58.34358714344067
+    ]
+   },
+   "properties": {
+    "id": 10422,
+    "name": "Tellenes",
+    "capacity_mw": 160.0,
+    "hub_height_m": 95.0,
+    "turbines": 50,
+    "price_area": "NO2",
+    "municipality": "Sokndal, Lund",
+    "county": "Rogaland"
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     11.802568456826432,
+     61.1995417478755
+    ]
+   },
+   "properties": {
+    "id": 10472,
+    "name": "Raskiftet",
+    "capacity_mw": 111.6,
+    "hub_height_m": 117.0,
+    "turbines": 31,
+    "price_area": "NO1",
+    "municipality": "Trysil, Åmot",
+    "county": "Innlandet"
+   }
+  }
+ ]
+}
