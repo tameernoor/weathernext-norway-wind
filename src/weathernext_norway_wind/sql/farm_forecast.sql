@@ -1,7 +1,8 @@
 -- 100 m wind forecast summary for the grid cell each wind farm sits in.
 --
--- {table} is filled in by the Python client (table names cannot be query
--- parameters). @farms is an ARRAY<STRUCT<id INT64, lon FLOAT64, lat FLOAT64>>.
+-- {table} and {norway_box} are filled in by the Python client (table names
+-- cannot be query parameters). @farms is an
+-- ARRAY<STRUCT<id INT64, lon FLOAT64, lat FLOAT64>>.
 --
 -- Column names follow the WeatherNext 3 variable list. Confirm them once your
 -- access is approved with
@@ -25,9 +26,7 @@ WHERE
   -- column lets BigQuery skip most of the globe within that run. planar => TRUE
   -- keeps the edges straight; as great circles the southern edge would bow
   -- north past the south-coast farms.
-  AND ST_INTERSECTS(
-    t.geography,
-    ST_GEOGFROMTEXT('POLYGON((4 57.5, 32 57.5, 32 71.5, 4 71.5, 4 57.5))', planar => TRUE)
-  )
-  AND f.hours <= @max_hours
+  AND ST_INTERSECTS(t.geography, ST_GEOGFROMTEXT('{norway_box}', planar => TRUE))
+  -- From +1 h: "now" itself belongs to the history.
+  AND f.hours BETWEEN 1 AND @max_hours
 ORDER BY farm_id, lead_hours
