@@ -1,0 +1,12 @@
+# Uses your gcloud login (application default credentials). No secrets here.
+weathernext_norway_wind:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GOOGLE_CLOUD_PROJECT') }}"
+      dataset: "{{ env_var('DBT_DATASET', 'weathernext_norway_wind') }}"
+      # Must match the location of the WeatherNext dataset you subscribed to.
+      location: "{{ env_var('DBT_LOCATION', 'US') }}"
+      threads: 4

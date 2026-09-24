@@ -1,0 +1,34 @@
+name: weathernext_norway_wind
+version: "0.1.0"
+profile: weathernext_norway_wind
+
+vars:
+  # A box around mainland Norway; all of NVE's operating farms fall inside it.
+  norway_box: "POLYGON((4 57.5, 32 57.5, 32 71.5, 4 71.5, 4 57.5))"
+  max_hours: 48
+  history_days: 7
+  # First build: how many days of past runs to load into the archive. One more
+  # than history_days, so the first history is complete.
+  backfill_days: 8
+  # Later builds: how far back to look for runs not yet in the archive.
+  lookback_hours: 6
+
+models:
+  weathernext_norway_wind:
+    staging:
+      +materialized: view
+    exports:
+      +materialized: table
+      +contract:
+        enforced: true
+
+seeds:
+  weathernext_norway_wind:
+    nve_wind_farms:
+      +column_types:
+        id: int64
+        lon: float64
+        lat: float64
+        capacity_mw: float64
+        hub_height_m: float64
+        turbines: int64

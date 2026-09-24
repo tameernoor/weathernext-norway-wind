@@ -8,7 +8,7 @@ This is an example project. It uses a generic power curve, not each turbine's re
 
 ## How it works
 
-1. `wnw farms` downloads the 61 operating wind farms from NVE, with location, capacity and hub height, and writes `web/data/farms.geojson`.
+1. `wnw farms` downloads the 61 operating wind farms from NVE, with location, capacity and hub height, and writes `web/data/farms.geojson`. It also writes the same list as `dbt/seeds/nve_wind_farms.csv` for the dbt route.
 2. `wnw forecast` sends those points to BigQuery. One query joins each farm to the WeatherNext grid cell it sits in and returns P10, P50 and P90 of `wind_speed_100m` for each hour of the newest run. The result is written to `web/data/forecast.json`.
 3. `wnw history` does the same for the past week. For each past hour it takes the +1 hour step of the run that started an hour earlier, which is the model's closest view of what the wind was. The result is written to `web/data/history.json`. These are model values, not measurements.
 4. `web/` is a static page that reads the files and joins history and forecast into one timeline. No backend.
@@ -42,6 +42,34 @@ Then open http://localhost:8000. Run the commands from the repository root, sinc
 The dry run prints an upper bound on bytes scanned and bills nothing. The history estimate looks large, since it counts every run's full forecast array. The query filters on a box around Norway, and BigQuery uses that to skip most of the globe, but dry runs don't account for it. The real run prints the bytes actually billed.
 
 `wnw update` finds the newest run once and runs `wnw history` and `wnw forecast` around it, so the two meet exactly at now. Running it every hour keeps the map current. Pass `--init-time` to use an earlier run. The two commands also run on their own; give them the same time (`--until` and `--init-time`) or the timeline can have a gap. Synoptic runs start at 00, 06, 12 and 18 UTC, and interim runs every hour in between.
+
+## Alternative: a dbt pipeline
+
+The [`dbt/`](dbt/) folder produces the same `forecast.json` and `history.json` as a dbt project on BigQuery. The map doesn't change. The difference is that the data becomes a tested pipeline with its own archive.
+
+- `stg_weathernext__wind_100m` flattens the forecast array over Norway. `stg_nve__wind_farms` reads the farm list, which `wnw farms` writes as a dbt seed.
+- `farm_wind_runs` is an incremental archive of every run at every farm. Each build reads only new runs from WeatherNext and adds them, so over time you get your own history to backtest against.
+- `export_forecast` and `export_history` have the exact shape of the two JSON files. Their contracts are enforced, so a change that would break the map fails the build instead.
+- Tests check one row per farm, run and hour, that P10 ≤ P50 ≤ P90, and that every farm in the archive exists in the farm list. Column tests are in `dbt/models/schema.yml`, and tests written as SQL are in `dbt/tests/`. Source freshness warns when WeatherNext stops delivering new runs.
+- `wnw export` copies the export tables into `web/data/` as they are. It holds no logic and reads the tables directly, which BigQuery doesn't bill as a query.
+
+```sh
+uv sync --group dbt
+set -a; source .env; set +a
+
+uv run wnw farms
+uv run dbt source freshness --project-dir dbt --profiles-dir dbt \
+  && uv run dbt build --project-dir dbt --profiles-dir dbt \
+  && uv run wnw export
+```
+
+Keep the `&&`. When a test fails, `dbt build` skips everything that depends on it and exits with an error, and the `&&` stops `wnw export`, so the map keeps its last good data. Without it the export would copy stale tables without complaint. Run the chained command every hour to keep the map current.
+
+The first build loads the past 8 days. Check what that costs before running it: `uv run dbt compile --project-dir dbt --profiles-dir dbt`, then paste `dbt/target/compiled/weathernext_norway_wind/models/archive/farm_wind_runs.sql` into the BigQuery console, which shows the bytes it would read. Like the dry run above, that figure is an upper bound.
+
+Later builds only look at the last 6 hours of runs, so if the hourly job stops for longer, catch up with `uv run dbt build --project-dir dbt --profiles-dir dbt --vars '{lookback_hours: 48}'`. Both are variables in `dbt/dbt_project.yml`. The archive's tests check the last day of rows, so the cost of each build stays flat as the archive grows. `DBT_LOCATION` must match the location of your WeatherNext dataset.
+
+To see the models and how they depend on each other as a graph, run `uv run dbt docs generate --project-dir dbt --profiles-dir dbt`, then `uv run dbt docs serve --project-dir dbt --profiles-dir dbt`.
 
 ## Development
 

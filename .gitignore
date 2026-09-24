@@ -10,3 +10,9 @@ __pycache__/
 # History ends at "now", so its newest hour is real-time too.
 web/data/forecast*.json
 web/data/history*.json
+
+# dbt
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml

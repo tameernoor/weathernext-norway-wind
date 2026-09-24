@@ -1,0 +1,73 @@
+models:
+  - name: stg_nve__wind_farms
+    columns:
+      - name: farm_id
+        data_tests: [unique, not_null]
+      - name: location
+        data_tests: [not_null]
+
+  - name: farm_wind_runs
+    description: Archive of every forecast run at every farm, one row per farm, run and lead hour.
+    # Tests check the last day only. Checking the whole archive would cost more
+    # every hour, and one bad old row would fail every build after it.
+    columns:
+      - name: farm_id
+        data_tests:
+          - not_null:
+              config:
+                where: "init_time >= timestamp_sub(current_timestamp(), interval 1 day)"
+          - relationships:
+              arguments:
+                to: ref('stg_nve__wind_farms')
+                field: farm_id
+              config:
+                where: "init_time >= timestamp_sub(current_timestamp(), interval 1 day)"
+                # A farm NVE retires leaves the seed but stays in the archive.
+                severity: warn
+      - name: init_time
+        data_tests:
+          - not_null:
+              config:
+                where: "init_time >= timestamp_sub(current_timestamp(), interval 1 day)"
+      - name: p50
+        data_tests:
+          - not_null:
+              config:
+                where: "init_time >= timestamp_sub(current_timestamp(), interval 1 day)"
+
+  - name: export_forecast
+    description: One row per farm; `wnw export` writes it to web/data/forecast.json.
+    columns:
+      - name: init_time
+        data_type: string
+      - name: variable
+        data_type: string
+      - name: attribution
+        data_type: string
+      - name: farm_id
+        data_type: string
+        data_tests: [unique, not_null]
+      - name: steps
+        data_type: >-
+          array<struct<time string, hours int64, p10 float64, p50 float64,
+          p90 float64, output_p50 float64>>
+
+  - name: export_history
+    description: One row per farm; `wnw export` writes it to web/data/history.json.
+    columns:
+      - name: start
+        data_type: string
+      - name: end
+        quote: true
+        data_type: string
+      - name: variable
+        data_type: string
+      - name: attribution
+        data_type: string
+      - name: farm_id
+        data_type: string
+        data_tests: [unique, not_null]
+      - name: steps
+        data_type: >-
+          array<struct<time string, p10 float64, p50 float64, p90 float64,
+          output_p50 float64>>

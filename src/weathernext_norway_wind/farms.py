@@ -26,6 +26,29 @@ def fetch_details() -> list[dict]:
     return response.json()
 
 
+SEED_COLUMNS = [
+    "id",
+    "name",
+    "lon",
+    "lat",
+    "capacity_mw",
+    "hub_height_m",
+    "turbines",
+    "price_area",
+    "municipality",
+    "county",
+]
+
+
+def seed_rows(farms: dict) -> list[dict]:
+    """The farms as flat rows for the dbt seed."""
+    rows = []
+    for feature in farms["features"]:
+        lon, lat = feature["geometry"]["coordinates"]
+        rows.append(feature["properties"] | {"lon": lon, "lat": lat})
+    return [{column: row[column] for column in SEED_COLUMNS} for row in rows]
+
+
 def merge(locations: dict, details: list[dict]) -> dict:
     """Join map points to plant details. Farms missing from either side are dropped."""
     by_number = {d["AnleggsNr"]: d for d in details}

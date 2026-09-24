@@ -1,6 +1,8 @@
-"""Command line entry point: `wnw farms`, `wnw update`, `wnw forecast`, `wnw history`."""
+"""Command line entry point: `wnw farms`, `wnw update`, `wnw forecast`, `wnw history`
+and, for the dbt route, `wnw export`."""
 
 import argparse
+import csv
 import json
 import os
 import sys
@@ -9,6 +11,7 @@ from pathlib import Path
 
 DATA_DIR = Path("web/data")
 FARMS_PATH = DATA_DIR / "farms.geojson"
+SEED_PATH = Path("dbt/seeds/nve_wind_farms.csv")
 
 
 def write_json(path: Path, document: dict) -> None:
@@ -48,11 +51,15 @@ def run_time(args: argparse.Namespace, table: str, flag: str) -> datetime:
     return latest_init_time(table)
 
 
-def save(name: str, document: dict, moment: datetime, job, farm_count: int) -> None:
-    print(f"billed {job.total_bytes_billed / 1e9:.2f} GB")
+def write_run(name: str, document: dict, moment: datetime) -> None:
     # Keep every run on disk; <name>.json is the copy the map reads.
     write_json(DATA_DIR / f"{name}-{moment.strftime('%Y%m%dT%H%MZ')}.json", document)
     write_json(DATA_DIR / f"{name}.json", document)
+
+
+def save(name: str, document: dict, moment: datetime, job, farm_count: int) -> None:
+    print(f"billed {job.total_bytes_billed / 1e9:.2f} GB")
+    write_run(name, document, moment)
     print(f"{len(document['farms'])} of {farm_count} farms have data")
 
 
@@ -62,10 +69,17 @@ def print_dry_run(job) -> None:
 
 
 def cmd_farms(_: argparse.Namespace) -> None:
-    from .farms import fetch_details, fetch_locations, merge
+    from .farms import SEED_COLUMNS, fetch_details, fetch_locations, merge, seed_rows
 
     farms = merge(fetch_locations(), fetch_details())
     write_json(FARMS_PATH, farms)
+    # The same farms as the seed for the dbt route.
+    SEED_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with SEED_PATH.open("w", newline="", encoding="utf-8") as seed:
+        writer = csv.DictWriter(seed, fieldnames=SEED_COLUMNS)
+        writer.writeheader()
+        writer.writerows(seed_rows(farms))
+    print(f"wrote {SEED_PATH}")
     print(f"{len(farms['features'])} wind farms")
 
 
@@ -96,6 +110,19 @@ def cmd_history(args: argparse.Namespace) -> None:
     save("history", document, end, job, len(farms["features"]))
 
 
+def cmd_export(args: argparse.Namespace) -> None:
+    """Write the dbt export tables to the files the map reads."""
+    from .export import read_document
+
+    project = os.environ.get("GOOGLE_CLOUD_PROJECT")
+    if not project:
+        sys.exit("Set GOOGLE_CLOUD_PROJECT.")
+    dataset = f"{project}.{args.dataset}"
+    for name in ("forecast", "history"):
+        document = read_document(f"{dataset}.export_{name}")
+        write_run(name, document, parse_utc(document.get("init_time") or document["end"]))
+
+
 def cmd_update(args: argparse.Namespace) -> None:
     """History and forecast from the same run, so they meet exactly at now."""
     table, _ = table_and_farms(args)
@@ -110,6 +137,14 @@ def main() -> None:
 
     farms = commands.add_parser("farms", help="download wind farm locations from NVE")
     farms.set_defaults(run=cmd_farms)
+
+    export = commands.add_parser("export", help="dbt route: write the export tables to web/data")
+    export.add_argument(
+        "--dataset",
+        default=os.environ.get("DBT_DATASET", "weathernext_norway_wind"),
+        help="dataset dbt builds into (default: DBT_DATASET or weathernext_norway_wind)",
+    )
+    export.set_defaults(run=cmd_export)
 
     update = commands.add_parser("update", help="history and forecast around the newest run")
     update.add_argument("--init-time", help="run to use as now, in UTC (default: newest)")
