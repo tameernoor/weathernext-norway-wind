@@ -7,7 +7,8 @@ __pycache__/
 
 # Real-time forecasts fall under Google DeepMind's experimental data terms,
 # not CC BY 4.0. Keep them out of the repo; see README "Data and licences".
-# History ends at "now", so its newest hour is real-time too.
+# History is about times at least seven hours ago, so CC BY 4.0, but it is
+# generated data like the forecasts.
 web/data/forecast*.json
 web/data/history*.json
 

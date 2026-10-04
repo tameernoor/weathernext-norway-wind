@@ -11,8 +11,8 @@ vars:
   history_days: 5
   # No build reads further back than this: not the first build, and not the
   # catch-up after a pause, however long. The history then fills up to
-  # history_days over the following days. For the full history at once, run
-  # one build with --vars '{backfill_days: 6}'; it reads only the missing runs.
+  # history_days over the following days. To fill it sooner, run builds with
+  # --vars '{backfill_days: 6}' until nothing is missing; each adds one UTC day.
   backfill_days: 1
 
 models:
