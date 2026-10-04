@@ -53,7 +53,10 @@ where
     {%- for run in missing %}timestamp('{{ run }}'){{ ", " if not loop.last }}{% endfor -%}
   )
   {%- else -%}
-  false
+  {#- Nothing to read. A plain `false` would make BigQuery estimate the whole
+      table for the merge, and a daily query quota, which is checked against
+      the estimate, refuses on that. -#}
+  wind.init_time in (timestamp('1970-01-01T00:00:00Z'))
   {%- endif %}
   {% else %}
   wind.init_time >= {{ window_start }}
