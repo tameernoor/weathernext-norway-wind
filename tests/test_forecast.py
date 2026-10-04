@@ -6,6 +6,7 @@ from weathernext_norway_wind.forecast import (
     NORWAY_BOX,
     farm_parameter,
     load_sql,
+    query_config,
     to_forecast_document,
     to_history_document,
 )
@@ -29,6 +30,26 @@ def row(hours, p50=12.5):
     }
 
 
+def test_queries_are_capped_at_1000_gb_by_default(monkeypatch):
+    # Google's estimates for the box queries run far above what they read, and
+    # the cap is checked against the estimate, so it sits just under 1 TiB.
+    monkeypatch.delenv("WNW_MAX_GB", raising=False)
+    assert query_config([]).maximum_bytes_billed == 1_000_000_000_000
+
+
+def test_cap_follows_wnw_max_gb(monkeypatch):
+    monkeypatch.setenv("WNW_MAX_GB", "2.5")
+    assert query_config([]).maximum_bytes_billed == 2_500_000_000
+
+
+@pytest.mark.parametrize("value", ["0", "-1"])
+def test_cap_must_be_above_zero(monkeypatch, value):
+    # BigQuery may read a cap of 0 as no cap at all.
+    monkeypatch.setenv("WNW_MAX_GB", value)
+    with pytest.raises(ValueError):
+        query_config([])
+
+
 @pytest.mark.parametrize("name", ["farm_forecast", "farm_history", "latest_init"])
 def test_load_sql_fills_in_every_placeholder(name):
     sql = load_sql(name, "p.d.weathernext_3_0_0_0p1deg")
@@ -37,8 +58,18 @@ def test_load_sql_fills_in_every_placeholder(name):
 
 
 def test_queries_filter_on_the_norway_box():
-    for name in ("farm_forecast", "farm_history"):
+    for name in ("farm_forecast", "farm_history", "latest_init"):
         assert NORWAY_BOX in load_sql(name, "t")
+
+
+def test_newest_run_lookup_picks_runs_that_reach_three_days():
+    # Only the runs at 00, 06, 12 and 18 UTC go past 48 hours.
+    assert "IN (0, 6, 12, 18)" in load_sql("latest_init", "t")
+
+
+def test_newest_run_lookup_covers_the_publication_delay():
+    # Runs appear in BigQuery about 7 hours after they start.
+    assert "INTERVAL 24 HOUR" in load_sql("latest_init", "t")
 
 
 def test_farm_parameter_passes_every_farm():

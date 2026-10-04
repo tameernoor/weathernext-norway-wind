@@ -1,4 +1,5 @@
--- web/data/forecast.json, one row per farm: the newest run's forecast.
+-- web/data/forecast.json, one row per farm: the forecast from the newest run
+-- that reaches max_hours.
 -- `wnw export` writes this table out as is, so every column here is part of
 -- the file the map reads. The contract in schema.yml guards that shape.
 -- The constant bound on init_time lets BigQuery prune partitions; filtering
@@ -9,8 +10,11 @@ with recent as (
   where init_time >= timestamp_sub(current_timestamp(), interval {{ var('history_days') + 1 }} day)
 ),
 
+-- The newest run that reaches max_hours.
 newest as (
-  select max(init_time) as init_time from recent
+  select max(init_time) as init_time
+  from recent
+  where lead_hours = {{ var('max_hours') }}
 )
 
 select

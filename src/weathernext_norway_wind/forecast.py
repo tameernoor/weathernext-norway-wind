@@ -1,5 +1,6 @@
 """Query WeatherNext 3 for the 100 m wind at each wind farm, past and future."""
 
+import os
 from datetime import datetime
 from importlib.resources import files
 
@@ -29,17 +30,28 @@ def farm_parameter(farms: dict) -> bigquery.ArrayQueryParameter:
     return bigquery.ArrayQueryParameter("farms", "STRUCT", points)
 
 
-def run_query(sql: str, parameters: list, dry_run: bool = False) -> bigquery.QueryJob:
-    config = bigquery.QueryJobConfig(
-        query_parameters=parameters, dry_run=dry_run, use_query_cache=not dry_run
+def query_config(parameters: list, dry_run: bool = False) -> bigquery.QueryJobConfig:
+    # A query that would bill more than WNW_MAX_GB fails without being charged.
+    max_bytes = int(float(os.environ.get("WNW_MAX_GB", "1000")) * 1e9)
+    if max_bytes < 1:
+        # BigQuery may read a cap of 0 as no cap at all.
+        raise ValueError("WNW_MAX_GB must be above 0.")
+    return bigquery.QueryJobConfig(
+        query_parameters=parameters,
+        dry_run=dry_run,
+        use_query_cache=not dry_run,
+        maximum_bytes_billed=max_bytes,
     )
-    return bigquery.Client().query(sql, job_config=config)
+
+
+def run_query(sql: str, parameters: list, dry_run: bool = False) -> bigquery.QueryJob:
+    return bigquery.Client().query(sql, job_config=query_config(parameters, dry_run))
 
 
 def latest_init_time(table: str) -> datetime:
     (row,) = run_query(load_sql("latest_init", table), []).result()
     if row["init_time"] is None:
-        raise LookupError("No forecast run in the last 6 hours.")
+        raise LookupError("No 00, 06, 12 or 18 UTC run in the last 24 hours.")
     return row["init_time"]
 
 

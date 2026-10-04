@@ -1,5 +1,7 @@
-{#- incremental_predicates lets the merge read only recent archive
-    partitions instead of the whole table. -#}
+{#- No build reads WeatherNext further back than this. incremental_predicates
+    uses the same bound, so the merge reads only recent archive partitions. -#}
+{%- set window_start = "timestamp_sub(current_timestamp(), interval "
+    ~ var('backfill_days') ~ " day)" -%}
 {{
   config(
     materialized='incremental',
@@ -7,10 +9,7 @@
     unique_key=['farm_id', 'init_time', 'lead_hours'],
     partition_by={'field': 'init_time', 'data_type': 'timestamp', 'granularity': 'day'},
     cluster_by=['farm_id'],
-    incremental_predicates=[
-      "DBT_INTERNAL_DEST.init_time >= timestamp_sub(current_timestamp(), interval "
-      ~ (var('lookback_hours') + 24) ~ " hour)"
-    ],
+    incremental_predicates=["DBT_INTERNAL_DEST.init_time >= " ~ window_start],
   )
 }}
 
@@ -30,12 +29,34 @@ join {{ ref('stg_nve__wind_farms') }} as farms
   on st_intersects(wind.cell, farms.location)
 where
   -- Constant bounds so BigQuery prunes partitions (a subquery reading the
-  -- archive's newest run would not). Re-reading a run already in the
-  -- archive is harmless: the merge on unique_key replaces it.
+  -- archive would not).
   {% if is_incremental() %}
-  wind.init_time >= timestamp_sub(current_timestamp(), interval {{ var('lookback_hours') }} hour)
+  {#- WeatherNext publishes runs hours late and not always in order. Before the
+      build, list the runs it has in the window (the Norway box keeps that to a
+      few MB per run) and read only those the archive doesn't have yet. -#}
+  {%- set missing = [] -%}
+  {%- if execute -%}
+    {%- set runs_sql = "select distinct format_timestamp('%FT%TZ', init_time) from " -%}
+    {%- set have = run_query(
+          runs_sql ~ this ~ " where init_time >= " ~ window_start
+        ).columns[0].values() -%}
+    {%- set available = run_query(
+          runs_sql ~ source('weathernext', 'forecast_0p1deg')
+          ~ " where init_time >= " ~ window_start
+          ~ " and st_intersects(geography, st_geogfromtext('" ~ var('norway_box')
+          ~ "', planar => true))"
+        ).columns[0].values() -%}
+    {%- set missing = available | reject('in', have) | list -%}
+  {%- endif %}
+  {% if missing -%}
+  wind.init_time in (
+    {%- for run in missing %}timestamp('{{ run }}'){{ ", " if not loop.last }}{% endfor -%}
+  )
+  {%- else -%}
+  false
+  {%- endif %}
   {% else %}
-  wind.init_time >= timestamp_sub(current_timestamp(), interval {{ var('backfill_days') }} day)
+  wind.init_time >= {{ window_start }}
   {% endif %}
 -- A farm exactly on a cell edge matches two cells; keep one.
 qualify row_number() over (

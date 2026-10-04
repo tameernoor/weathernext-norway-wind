@@ -122,7 +122,7 @@ async function main() {
   const times = [...new Set(layers.flatMap((l) => [...l.byTime.keys()]))].sort((a, b) => a - b);
   if (!times.length) {
     statusEl.textContent =
-      `${layers.length} wind farms. Run \`wnw history\` and \`wnw forecast\` to add wind data.`;
+      `${layers.length} wind farms. Run \`wnw forecast\` or the dbt route to add wind data.`;
     return;
   }
 

@@ -1,6 +1,6 @@
 -- web/data/history.json, one row per farm: the past days as the model saw
 -- them. For each hour, the +1 h step of the run that started an hour earlier.
--- Ends at the newest run, where export_forecast begins.
+-- Ends at the newest run that reaches max_hours, where export_forecast begins.
 -- The constant bound on init_time lets BigQuery prune partitions; filtering
 -- on max(init_time) alone would scan the whole archive.
 with recent as (
@@ -9,8 +9,11 @@ with recent as (
   where init_time >= timestamp_sub(current_timestamp(), interval {{ var('history_days') + 1 }} day)
 ),
 
+-- The newest run that reaches max_hours.
 newest as (
-  select max(init_time) as init_time from recent
+  select max(init_time) as init_time
+  from recent
+  where lead_hours = {{ var('max_hours') }}
 )
 
 select

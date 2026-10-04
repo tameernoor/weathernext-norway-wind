@@ -5,13 +5,15 @@ profile: weathernext_norway_wind
 vars:
   # A box around mainland Norway; all of NVE's operating farms fall inside it.
   norway_box: "POLYGON((4 57.5, 32 57.5, 32 71.5, 4 71.5, 4 57.5))"
-  max_hours: 48
-  history_days: 7
-  # First build: how many days of past runs to load into the archive. One more
-  # than history_days, so the first history is complete.
-  backfill_days: 8
-  # Later builds: how far back to look for runs not yet in the archive.
-  lookback_hours: 6
+  # Only the runs at 00, 06, 12 and 18 UTC go past 48 hours, so the map's
+  # forecast comes from the newest of those.
+  max_hours: 72
+  history_days: 5
+  # No build reads further back than this: not the first build, and not the
+  # catch-up after a pause, however long. The history then fills up to
+  # history_days over the following days. For the full history at once, run
+  # one build with --vars '{backfill_days: 6}'; it reads only the missing runs.
+  backfill_days: 1
 
 models:
   weathernext_norway_wind:

@@ -131,7 +131,7 @@ def cmd_update(args: argparse.Namespace) -> None:
     cmd_forecast(args)
 
 
-def main() -> None:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="wnw", description=__doc__)
     commands = parser.add_subparsers(required=True)
 
@@ -147,12 +147,15 @@ def main() -> None:
     export.set_defaults(run=cmd_export)
 
     update = commands.add_parser("update", help="history and forecast around the newest run")
-    update.add_argument("--init-time", help="run to use as now, in UTC (default: newest)")
+    update.add_argument(
+        "--init-time", help="run to use as now, in UTC (default: newest 00/06/12/18 UTC run)"
+    )
     update.set_defaults(run=cmd_update)
 
     forecast = commands.add_parser("forecast", help="the forecast from one run, per farm")
     forecast.add_argument(
-        "--init-time", help="run to use, in UTC, e.g. 2026-09-23T00:00 (default: newest)"
+        "--init-time",
+        help="run to use, in UTC, e.g. 2026-09-23T00:00 (default: newest 00/06/12/18 UTC run)",
     )
     forecast.set_defaults(run=cmd_forecast)
 
@@ -163,16 +166,20 @@ def main() -> None:
     history.set_defaults(run=cmd_history)
 
     for command in (update, forecast):
-        command.add_argument("--max-hours", type=int, default=48, help="lead time (default 48)")
+        command.add_argument("--max-hours", type=int, default=72, help="lead time (default 72)")
     for command in (update, history):
-        command.add_argument("--days", type=int, default=7, help="how far back (default 7)")
+        command.add_argument("--days", type=int, default=5, help="how far back (default 5)")
     for command in (update, forecast, history):
         command.add_argument("--table", help="overrides WEATHERNEXT_TABLE")
         command.add_argument(
             "--dry-run", action="store_true", help="print bytes scanned, run nothing"
         )
 
-    args = parser.parse_args()
+    return parser
+
+
+def main() -> None:
+    args = build_parser().parse_args()
     args.run(args)
 
 

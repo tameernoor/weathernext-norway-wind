@@ -9,8 +9,11 @@ sources:
         config:
           loaded_at_field: init_time
           freshness:
-            # New runs arrive hourly.
-            warn_after: {count: 3, period: hour}
-            error_after: {count: 12, period: hour}
-            # Keeps the freshness check to recent partitions instead of the whole table.
-            filter: init_time > timestamp_sub(current_timestamp(), interval 1 day)
+            # New runs arrive hourly, but each one about 7 hours after it starts.
+            warn_after: {count: 10, period: hour}
+            error_after: {count: 24, period: hour}
+            # Two days of partitions, longer than error_after, and within them
+            # the Norway box, so the check reads a few MB instead of the globe.
+            filter: >-
+              init_time > timestamp_sub(current_timestamp(), interval 2 day)
+              and st_intersects(geography, st_geogfromtext('{{ var("norway_box") }}', planar => true))
