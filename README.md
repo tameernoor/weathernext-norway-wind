@@ -2,7 +2,7 @@
 
 A map of Norway's wind farms with WeatherNext 3 wind at 100 metres, roughly turbine hub height, on one timeline. Drag left to see the past five days as the model saw them. Drag right to see the forecast for the next three days.
 
-Each farm is a dot sized by installed capacity. The colour shows expected output from the median forecast. The halo around it grows when the 64 ensemble members disagree, so a small halo means the forecasts agree and a large one means nobody knows yet. Click a farm to see its P10 to P90 band over the whole timeline, with a line at now.
+Each farm is a dot sized by installed capacity. The colour shows expected output from the median forecast. The halo around it grows when the 64 ensemble members disagree, so a small halo means the forecasts agree and a large one means nobody knows yet. Click a farm to see its P10 to P90 band over the whole timeline, with a line at now. Point at that chart for each hour's values, and click it to show that hour on the map. Times are in your own time zone.
 
 This is an example project. It uses a generic power curve, not each turbine's real one.
 
@@ -90,6 +90,7 @@ uv run ruff format .
 
 - The forecast is for a roughly 10 km grid cell, not for the turbine. Most Norwegian wind farms sit on ridges and coastal hills that a cell that size cannot resolve.
 - Hub heights in Norway range from 31 to 145 metres. The forecast is at 100 metres.
+- Expected output is a rough indicator, mainly for comparing hours at the same farm. The grid cell's error differs from farm to farm, so comparisons between farms are weaker. It has not been checked against real production.
 - Expected output comes from the median wind only. The power curve drops to zero above cut-out speed, so running P10 and P90 through it would not give output percentiles.
 - Offshore wind at oil and gas installations, such as Hywind Tampen, is not in NVE's dataset.
 - Runs appear in BigQuery about seven hours after they start, and the map's now is the newest 00, 06, 12 or 18 UTC run. So now on the map is seven to thirteen hours behind the clock.
