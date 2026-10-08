@@ -13,7 +13,7 @@ sources:
             warn_after: {count: 10, period: hour}
             error_after: {count: 24, period: hour}
             # Two days of partitions, longer than error_after, and within them
-            # the Norway box, so the check reads a few MB instead of the globe.
+            # the Norway box, so the check reads about 0.2 GB instead of the globe.
             filter: >-
               init_time > timestamp_sub(current_timestamp(), interval 2 day)
               and st_intersects(geography, st_geogfromtext('{{ var("norway_box") }}', planar => true))
