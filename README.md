@@ -60,15 +60,35 @@ The bill is under 1% of the estimate. The queries filter on a box around Norway,
 
 Every query is capped at `WNW_MAX_GB` (1000 GB by default). BigQuery checks the cap against its estimate, not against what the query reads, so a query estimated over the cap fails without being charged. `wnw history` and `wnw update` (history plus forecast) read many runs and are estimated at several TB, so the default cap stops them on purpose. The dbt route below builds the same history for a fraction of that. To run them anyway, raise both `WNW_MAX_GB` and the project's daily quota above the estimate for that one run.
 
-## Alternative: a dbt pipeline
+## A dbt pipeline
 
-The [`dbt/`](dbt/) folder produces the same `forecast.json` and `history.json` as a dbt project on BigQuery. The map doesn't change. The difference is that the data becomes a tested pipeline with its own archive.
+The [`dbt/`](dbt/) folder builds the same `forecast.json` and `history.json` as a dbt project on BigQuery, so WeatherNext becomes one more source in an ordinary data pipeline. The map doesn't change.
 
-- `stg_weathernext__wind_100m` flattens the forecast array over Norway. `stg_nve__wind_farms` reads the farm list, which `wnw farms` writes as a dbt seed.
-- `farm_wind_runs` is an incremental archive of every run at every farm. Each build reads only new runs from WeatherNext and adds them, so over time you get your own history to backtest against.
-- `export_forecast` and `export_history` have the exact shape of the two JSON files. Their contracts are enforced, so a change that would break the map fails the build instead.
-- Tests check one row per farm, run and hour, that P10 ≤ P50 ≤ P90, and that every farm in the archive exists in the farm list. Column tests are in `dbt/models/schema.yml`, and tests written as SQL are in `dbt/tests/`. Source freshness warns when WeatherNext stops delivering new runs.
-- `wnw export` copies the export tables into `web/data/` as they are. It holds no logic and reads the tables directly, which BigQuery doesn't bill as a query.
+```mermaid
+flowchart LR
+  wn[("WeatherNext 3<br>in BigQuery")] --> stg["stg_weathernext__wind_100m<br>Norway box"]
+  nve[("NVE farm list<br>seed")] --> farms["stg_nve__wind_farms"]
+  stg --> arc["farm_wind_runs<br>incremental archive"]
+  farms --> arc
+  arc --> ef["export_forecast"]
+  arc --> eh["export_history"]
+  ef --> map["web/ map<br>via wnw export"]
+  eh --> map
+```
+
+[`docs/dbt-lineage.png`](docs/dbt-lineage.png) shows the same flow, with the SQL tests, as dbt's own lineage graph from `dbt docs`.
+
+| Pattern | How it shows up here |
+|---|---|
+| Source freshness | `dbt source freshness` warns when the newest run is 10 hours old and fails at 24. WeatherNext publishes about seven hours late. |
+| Staging | `stg_weathernext__wind_100m` flattens the forecast array and keeps the Norway box. It is ephemeral, so nobody can query it without a run filter. |
+| Incremental load with late data | `farm_wind_runs` lists the runs WeatherNext has and reads only those the archive lacks, so late and out-of-order runs are picked up. |
+| Idempotent merge | Rows merge on farm, run and lead hour, so running a build again never duplicates anything. |
+| Partitioning and clustering | The archive is partitioned by run day and clustered by farm. Filters use constant bounds so BigQuery can skip what it doesn't need. |
+| Tests | One row per farm, run and lead hour, P10 ≤ P50 ≤ P90, and every farm in the archive exists in the farm list (a warning). Column tests are in `dbt/models/schema.yml`, SQL tests in `dbt/tests/`. |
+| Data contracts | `export_forecast` and `export_history` have the exact shape of the map's JSON files. The contracts are enforced, so a change that would break the map fails the build. |
+| Cost guard | A daily query quota caps spend. BigQuery checks it against estimates far above the bill, so each build reads one UTC day. |
+| Serving | `wnw export` copies the export tables into `web/data/` with no logic. Reading a table directly isn't billed as a query. |
 
 ```sh
 uv sync --group dbt
