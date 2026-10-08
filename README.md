@@ -4,6 +4,13 @@ WeatherNext 3, Google DeepMind's AI weather model, is published as tables in Big
 
 The map is the example at the end of the pipeline. Each farm is a dot sized by installed capacity and coloured by expected output from the median forecast, with a halo that grows when the 64 ensemble members disagree. Drag the slider to move through time. Click a farm for its P10 to P90 band, point at the chart for each hour's values, and click it to show that hour on the map. Expected output uses a generic power curve, not each turbine's real one.
 
+<p>
+  <img src="docs/map-norway.jpg" alt="Map of Norway's 61 wind farms, coloured by expected output" width="49%">
+  <img src="docs/map-farm.jpg" alt="Smøla wind farm with its wind chart, and the map moved to the hour under the cursor" width="49%">
+</p>
+
+<sub>Wind from WeatherNext 3 by Google DeepMind (CC BY 4.0), map © OpenStreetMap contributors, wind farms from NVE (NLOD). Screenshots from 8 October 2026.</sub>
+
 ## Setup
 
 You need [uv](https://docs.astral.sh/uv/), the gcloud CLI and a Google Cloud project with billing.

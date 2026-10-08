@@ -159,7 +159,9 @@ function wireChart(container, steps, nowMs, pick) {
   svg.addEventListener("pointerdown", (event) => show(nearest(event)));
   // On a touch screen the values stay after the finger lifts.
   svg.addEventListener("pointerleave", (event) => event.pointerType === "mouse" && hide());
-  svg.addEventListener("click", (event) => pick(steps[nearest(event)].ms));
+  // Pick the hour the readout shows. Recomputing it from the click's position
+  // can land on the next hour, since clicks round to whole pixels.
+  svg.addEventListener("click", () => pick(steps[current].ms));
   svg.addEventListener("focus", () => show(current));
   svg.addEventListener("blur", hide);
   svg.addEventListener("keydown", (event) => {
