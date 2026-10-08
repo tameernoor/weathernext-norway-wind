@@ -3,26 +3,52 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Norway Wind Forecast</title>
+  <title>Norway Wind</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Norway's wind farms, last five days and next three</h1>
-    <p id="status">Loading…</p>
-    <label id="time-control" hidden>
-      <span id="time-label"></span>
-      <input id="time-slider" type="range" min="0" value="0" list="now-mark">
-      <datalist id="now-mark"></datalist>
-    </label>
-    <p class="legend">
-      Drag left into the past days, right into the forecast ·
-      dot size = installed MW · colour = expected output (median) ·
-      halo = how much the 64 forecasts disagree
-    </p>
+  <header class="top">
+    <p class="brand">Agent of The New</p>
+    <h1>Norway wind</h1>
+    <p id="run">Loading the forecast</p>
   </header>
-  <div id="map"></div>
+  <main class="app">
+    <div id="map" role="region" aria-label="Map of Norway's wind farms"></div>
+
+    <section id="timeline" class="timeline">
+      <div class="timeline-head">
+        <button id="play" type="button">Play</button>
+        <p class="when"><strong id="time-label"></strong> <span id="time-kind"></span></p>
+        <p class="series"><span id="series-farm"></span>
+          <span class="series-key"><i class="key-line"></i>median <i class="key-band"></i>80% of forecasts</span></p>
+      </div>
+      <div id="chart" class="chart" tabindex="0" role="slider"
+           aria-label="Time. Arrow keys move one hour, Page Up and Page Down one day."></div>
+      <div id="tip" class="tip" hidden></div>
+    </section>
+
+    <aside class="panel">
+      <section id="farm" class="farm"></section>
+      <section id="ranking" class="ranking">
+        <h2 id="ranking-title">Windiest at this hour</h2>
+        <ol id="farm-list"></ol>
+      </section>
+      <section class="key">
+        <ul>
+          <li><span class="swatch idle"></span>Idle, under 3 m/s</li>
+          <li><span class="swatch turning"></span>Turning, 3 to 12 m/s</li>
+          <li><span class="swatch full"></span>Full power, 12 to 25 m/s</li>
+          <li><span class="swatch cutout"></span>Above cut-out, 25 m/s and up</li>
+          <li><span class="swatch none"></span>No data for this hour</li>
+        </ul>
+        <p>Wind at 100 metres from WeatherNext 3, judged against a generic turbine. Dot size is installed capacity. The halo grows when the 64 forecasts disagree.</p>
+      </section>
+    </aside>
+  </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="app.js"></script>
 </body>

@@ -2,11 +2,11 @@
 
 WeatherNext 3, Google DeepMind's AI weather model, is published as tables in BigQuery. This repository treats it as one more source in an ordinary data pipeline. A dbt project keeps an archive of the 100 metre wind at Norway's 61 operating wind farms, and a small map shows the past five days and the next three.
 
-The map is the example at the end of the pipeline. Each farm is a dot sized by installed capacity and coloured by expected output from the median forecast, with a halo that grows when the 64 ensemble members disagree. Drag the slider to move through time. Click a farm for its P10 to P90 band, point at the chart for each hour's values, and click it to show that hour on the map. Expected output uses a generic power curve, not each turbine's real one.
+The map is the example at the end of the pipeline. Each farm is a dot sized by installed capacity and coloured by the median wind, banded by what a generic turbine does. It idles under 3 m/s, turns up to 12, runs at full power up to 25 and shuts down above. The halo grows when the 64 ensemble members disagree. Choose a farm on the map or in the list to see its details. The timeline under the map is that farm's wind, the past days as the model saw them and the 72 hours of WeatherNext forecast from the newest run, with the actual time marked. Click or drag it to move the map through time, or press Play.
 
 <p>
-  <img src="docs/map-norway.jpg" alt="Map of Norway's 61 wind farms, coloured by expected output" width="49%">
-  <img src="docs/map-farm.jpg" alt="Smøla wind farm with its wind chart, and the map moved to the hour under the cursor" width="49%">
+  <img src="docs/map-norway.jpg" alt="Map of Norway's 61 wind farms coloured by wind, with the farm list and the timeline of history and forecast" width="49%">
+  <img src="docs/map-farm.jpg" alt="Zoomed in on Smøla wind farm, with the timeline moved 20 hours ahead of now" width="49%">
 </p>
 
 <sub>Wind from WeatherNext 3 by Google DeepMind (CC BY 4.0), map © OpenStreetMap contributors, wind farms from NVE (NLOD). Screenshots from 8 October 2026.</sub>
@@ -66,7 +66,7 @@ python3 -m http.server -d web 8000      # then open http://localhost:8000
 
 Keep the `&&`. If a test fails, the export doesn't run and the map keeps its last good data.
 
-Each build looks back one day (`backfill_days` in `dbt/dbt_project.yml`) and reads the missing runs one UTC day at a time, oldest first. The first build therefore takes two rounds, and a new setup starts with about a day of history that grows to five days. Late in the UTC day the first round may get only 48-hour runs. The export tables are then empty, `wnw export` stops with an error, and the map gets its data from the second round. After a pause longer than a day the archive keeps a gap, which the map's slider skips without a mark. To fill missing runs from the last N days, run builds with `--vars '{backfill_days: N}'` until nothing is missing. `DBT_LOCATION` must match your WeatherNext dataset's location, and `uv run wnw farms` refreshes the committed farm list from NVE.
+Each build looks back one day (`backfill_days` in `dbt/dbt_project.yml`) and reads the missing runs one UTC day at a time, oldest first. The first build therefore takes two rounds, and a new setup starts with about a day of history that grows to five days. Late in the UTC day the first round may get only 48-hour runs. The export tables are then empty, `wnw export` stops with an error, and the map gets its data from the second round. After a pause longer than a day the archive keeps a gap, which shows as a blank stretch on the timeline. To fill missing runs from the last N days, run builds with `--vars '{backfill_days: N}'` until nothing is missing. `DBT_LOCATION` must match your WeatherNext dataset's location, and `uv run wnw farms` refreshes the committed farm list from NVE.
 
 `uv run dbt docs generate --no-compile --project-dir dbt --profiles-dir dbt` and then `uv run dbt docs serve --project-dir dbt --profiles-dir dbt` show the models and tests as a graph. Without `--no-compile`, generating the docs runs the billed run lookups.
 
@@ -126,9 +126,9 @@ uv run ruff format .
 
 - The forecast is for a roughly 10 km grid cell, not for the turbine. Most Norwegian wind farms sit on ridges and coastal hills that a cell that size cannot resolve.
 - Hub heights in Norway range from 31 to 145 metres. The forecast is at 100 metres.
-- Expected output is a rough indicator, mainly for comparing hours at the same farm, and it has not been checked against real production. Only the median goes through the power curve. The curve drops to zero above cut-out speed, so P10 and P90 run through it would not give output percentiles.
+- The 3, 12 and 25 m/s bands are a generic turbine's, not each farm's own, and they say nothing about real production.
 - Offshore wind at oil and gas installations, such as Hywind Tampen, is not in NVE's dataset.
-- Runs usually appear in BigQuery about seven hours after they start. One has been seen arriving an hour later, after a newer run. The map's now is the newest 00, 06, 12 or 18 UTC run, so it is usually seven to thirteen hours behind the clock.
+- Runs usually appear in BigQuery about seven hours after they start. One has been seen arriving an hour later, after a newer run. The newest 00, 06, 12 or 18 UTC run therefore started seven to thirteen hours before the actual time, which the timeline marks as Now.
 
 ## Data and licences
 

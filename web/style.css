@@ -1,86 +1,476 @@
-html, body {
-  margin: 0;
-  height: 100%;
-  font: 15px/1.4 system-ui, sans-serif;
-  color: #1c2430;
-  background: #f5f6f8;
+:root {
+  --ink: #1c2a35;
+  --ink-soft: #5b6b78;
+  --line: #d6dee4;
+  --panel: #f5f7f8;
+  --paper: #ffffff;
+  --deep: #0f3d63;
+  --idle: #d3d8dc;
+  --turning: #86b6d8;
+  --full: #1f5f8f;
+  --cutout: #c2410c;
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+/* The page is the window's height, but never below 640 px. On a shorter
+   window it scrolls, so the map row can't squeeze the timeline away. */
 body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 640px;
+  margin: 0;
+  font: 15px/1.45 "Archivo", system-ui, sans-serif;
+  font-variation-settings: "wdth" 100;
+  color: var(--ink);
+  background: var(--panel);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--deep);
+  outline-offset: 2px;
+}
+
+/* Header */
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.top .brand {
+  margin: 0;
+  padding-right: 14px;
+  border-right: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 700;
+  font-variation-settings: "wdth" 62;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.top h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  font-variation-settings: "wdth" 125;
+  letter-spacing: -0.01em;
+}
+
+.top p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* Layout */
+
+.app {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  grid-template-rows: minmax(320px, 1fr) auto;
+  grid-template-areas:
+    "map panel"
+    "timeline panel";
+}
+
+#map {
+  grid-area: map;
+  background: #dfe5e9;
+}
+
+/* Grey tiles, so the wind colours carry the map. Filtered per tile, since a
+   filter on the whole pane shows seams at fractional zoom. */
+.leaflet-tile {
+  filter: grayscale(1) brightness(1.06) contrast(0.9);
+}
+
+.leaflet-tooltip {
+  font: 13px "Archivo", system-ui, sans-serif;
+  color: var(--ink);
+}
+
+/* Panel */
+
+.panel {
+  grid-area: panel;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* On a short window the whole panel scrolls, so the list keeps some rows. */
+  overflow-y: auto;
+  border-left: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.farm {
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.farm h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 700;
+  font-variation-settings: "wdth" 118;
+}
+
+.farm .place {
+  margin: 2px 0 12px;
+  color: var(--ink-soft);
+}
+
+.facts {
+  display: flex;
+  gap: 18px;
+  margin: 0 0 14px;
+}
+
+.facts div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.facts dt {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.facts dd {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.speed {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
+}
+
+.speed strong {
+  font-size: 54px;
+  line-height: 1;
+  font-weight: 700;
+  font-variation-settings: "wdth" 90;
+  font-variant-numeric: tabular-nums;
+}
+
+.speed span {
+  font-size: 18px;
+  color: var(--ink-soft);
+}
+
+.state {
+  margin: 6px 0 0;
+}
+
+.state .tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.state .range {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Takes the space left in the panel, but keeps room for a few rows; below
+   that the whole panel scrolls. */
+.ranking {
+  flex: 1 1 0;
+  min-height: 210px;
   display: flex;
   flex-direction: column;
 }
 
-header {
-  padding: 12px 16px;
+.ranking h2 {
+  margin: 0;
+  padding: 14px 20px 6px;
+  font-size: 15px;
+  font-weight: 600;
+  font-variation-settings: "wdth" 112;
 }
 
-h1 {
-  margin: 0 0 4px;
-  font-size: 20px;
+#farm-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  /* Rows reorder as the hour changes; don't let the scroll follow them. */
+  overflow-anchor: none;
+  margin: 0;
+  padding: 0 0 8px;
+  list-style: none;
 }
 
-header p {
-  margin: 4px 0;
-}
-
-.legend {
-  color: #5a6472;
-  font-size: 13px;
-}
-
-#time-control {
-  display: flex;
-  gap: 12px;
+#farm-list button {
+  display: grid;
+  grid-template-columns: 1fr 56px 64px;
   align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 5px 20px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
 }
 
-#time-control[hidden] {
-  display: none;
+#farm-list button:hover {
+  background: var(--panel);
 }
 
-#time-slider {
-  flex: 1;
-  max-width: 480px;
+/* Inside the scrolling list the ring has to sit inside the row. */
+#farm-list button:focus-visible {
+  outline-offset: -2px;
 }
 
-#map {
-  flex: 1;
+#farm-list button[aria-current="true"] {
+  background: #e8f0f6;
+  font-weight: 600;
 }
 
-.band-chart {
-  cursor: crosshair;
-  touch-action: none;
+#farm-list .bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
 }
 
-.band-chart text {
-  font-size: 10px;
-  fill: #5a6472;
+#farm-list .bar i {
+  display: block;
+  height: 100%;
 }
 
-.band-chart:focus-visible {
-  outline: 2px solid hsl(212, 70%, 35%);
-  outline-offset: 2px;
+#farm-list .value {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-.band-chart .hair {
-  stroke: #1c2430;
-  stroke-width: 1;
+.key {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--ink-soft);
 }
 
-.band-chart .hair-dot {
-  fill: hsl(212, 70%, 35%);
-  stroke: #fff;
-  stroke-width: 2;
+.key ul {
+  display: grid;
+  gap: 3px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
 }
 
-.chart-readout {
-  /* Three lines, so a windy hour's longer text doesn't move the popup. */
-  min-height: 4.2em;
+.key li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.key p {
+  margin: 0;
+}
+
+.swatch {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.swatch.idle { background: var(--idle); }
+.swatch.turning { background: var(--turning); }
+.swatch.full { background: var(--full); }
+.swatch.cutout { background: var(--cutout); }
+.swatch.none { background: var(--paper); border: 1px solid var(--ink-soft); }
+
+/* Timeline */
+
+.timeline {
+  grid-area: timeline;
+  position: relative;
+  padding: 10px 20px 8px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.timeline-head {
+  display: flex;
+  align-items: center;
+  gap: 8px 14px;
+  flex-wrap: wrap;
+}
+
+#play {
+  min-width: 72px;
+  padding: 5px 12px;
+  border: 1px solid var(--deep);
+  border-radius: 3px;
+  background: var(--deep);
+  color: var(--paper);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.when {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.when strong {
+  font-size: 18px;
+  font-variation-settings: "wdth" 108;
+}
+
+.when span {
+  margin-left: 6px;
+  color: var(--ink-soft);
+}
+
+.series {
+  margin: 0 0 0 auto;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+#series-farm {
+  margin-right: 10px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.series-key i {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 4px 0 8px;
+}
+
+.key-line {
+  width: 16px;
+  height: 2px;
+  background: var(--deep);
+}
+
+.key-band {
+  width: 16px;
+  height: 9px;
+  background: #c9dceb;
+}
+
+.chart {
+  height: 160px;
+  margin-top: 6px;
+  cursor: ew-resize;
+  /* Horizontal drags move the time; vertical swipes still scroll the page. */
+  touch-action: pan-y;
+}
+
+.chart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.chart text {
+  font: 11px "Archivo", system-ui, sans-serif;
+  fill: var(--ink-soft);
+}
+
+.chart .region {
+  font-weight: 600;
+  fill: var(--ink);
+}
+
+.chart .now {
+  fill: var(--ink);
+}
+
+.tip {
+  position: absolute;
+  padding: 4px 8px;
+  border-radius: 3px;
+  background: var(--ink);
+  color: var(--paper);
   font-size: 12px;
-  color: #5a6472;
+  line-height: 1.35;
+  pointer-events: none;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-.chart-readout strong {
-  color: #1c2430;
+.empty {
+  margin: 0;
+  padding: 18px 20px;
+  color: var(--ink-soft);
+}
+
+/* Small or short screens, phones either way up: map, timeline, then the panel. */
+
+@media (max-width: 820px), (max-height: 520px) {
+  body {
+    height: auto;
+    min-height: 0;
+  }
+
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: max(55vh, 300px) auto auto;
+    grid-template-areas:
+      "map"
+      "timeline"
+      "panel";
+  }
+
+  .panel {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Stacked, the panel is as tall as its content, so the list keeps its own height. */
+  .ranking {
+    flex: none;
+  }
+
+  .series {
+    margin-left: 0;
+  }
+
+  #farm-list {
+    max-height: 360px;
+  }
 }
