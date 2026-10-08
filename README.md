@@ -44,11 +44,21 @@ python3 -m http.server -d web 8000
 
 Then open http://localhost:8000. Run the commands from the repository root, since they read and write `web/data/`.
 
-The dry run prints Google's estimate of the bytes scanned and bills nothing. For these queries the estimate is far too high. The query filters on a box around Norway, and BigQuery uses that to skip most of the globe, but the estimate doesn't account for it. When this was written, a forecast estimated at 285 GB billed 0.23 GB. The real run prints the bytes actually billed.
+`wnw forecast` uses the newest 00, 06, 12 or 18 UTC run, since the hourly runs in between stop at 48 hours. A new one arrives every six hours, usually about seven hours after it starts. Pass `--init-time` to use an earlier run. `wnw update` runs `wnw history` and `wnw forecast` from the same run, which the map shows as now; run on their own, give them the same time (`--until` and `--init-time`) or the timeline can have a gap.
+
+### Estimate versus bill
+
+BigQuery gives two numbers for a query. The estimate comes before it runs, from a dry run such as `wnw forecast --dry-run`, and bills nothing. The bill is what the query actually read, and that is what you pay.
+
+| Query, October 2026 | Google's estimate | Billed |
+|---|---|---|
+| `wnw forecast` on one hourly 48-hour run | 285 GB | 0.23 GB |
+| dbt first build | 949 GB | 5.4 GB |
+| dbt build adding 12 runs | about 650 GB | 4.9 GB |
+
+The bill is under 1% of the estimate. The queries filter on a box around Norway, and the WeatherNext table is clustered by geography, so while a query runs BigQuery skips the stored blocks outside the box. The estimate can't see that in advance, and for these queries it counts the whole globe for every UTC day the query touches. [Google's documentation](https://docs.cloud.google.com/bigquery/docs/best-practices-costs) says that for clustered tables the estimate is an upper bound. `wnw forecast` and `wnw history` print the billed bytes, and the BigQuery console shows them for every job.
 
 Every query is capped at `WNW_MAX_GB` (1000 GB by default). BigQuery checks the cap against its estimate, not against what the query reads, so a query estimated over the cap fails without being charged. `wnw history` and `wnw update` (history plus forecast) read many runs and are estimated at several TB, so the default cap stops them on purpose. The dbt route below builds the same history for a fraction of that. To run them anyway, raise both `WNW_MAX_GB` and the project's daily quota above the estimate for that one run.
-
-`wnw forecast` uses the newest 00, 06, 12 or 18 UTC run, since the hourly runs in between stop at 48 hours. A new one arrives every six hours, usually about seven hours after it starts. Pass `--init-time` to use an earlier run. `wnw update` runs `wnw history` and `wnw forecast` from the same run, which the map shows as now; run on their own, give them the same time (`--until` and `--init-time`) or the timeline can have a gap.
 
 ## Alternative: a dbt pipeline
 
