@@ -108,6 +108,18 @@ Every build first lists the runs WeatherNext has from the last `backfill_days`, 
 
 To see the models and how they depend on each other as a graph, run `uv run dbt docs generate --no-compile --project-dir dbt --profiles-dir dbt` (without `--no-compile` it runs the billed lookups too), then `uv run dbt docs serve --project-dir dbt --profiles-dir dbt`.
 
+### Scheduled builds
+
+[`.github/workflows/dbt-build.yml`](.github/workflows/dbt-build.yml) runs `dbt source freshness` and `dbt build` every six hours, and by hand from the Actions tab. It only builds the archive in BigQuery, so no forecast ends up on GitHub, only the log. It does nothing until the repository variable `WEATHERNEXT_TABLE` is set, so a copy of this repository stays quiet. Four builds a day read about 11 GB.
+
+Switching it on takes three steps.
+
+1. In Google Cloud, create a service account with BigQuery User on the project and BigQuery Data Viewer on the WeatherNext dataset. If the dbt dataset already exists, give it BigQuery Data Editor there too.
+2. Let GitHub sign in as that service account without a key, through Workload Identity Federation limited to your repository. The [`google-github-actions/auth`](https://github.com/google-github-actions/auth#indirect-wif) README has the commands, under Workload Identity Federation through a Service Account.
+3. In the repository settings, under Secrets and variables and then Actions, add the variables `WEATHERNEXT_TABLE`, `GOOGLE_CLOUD_PROJECT`, `GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT`, plus `DBT_DATASET` and `DBT_LOCATION` if yours differ from `weathernext_norway_wind` and `US`.
+
+GitHub emails the person who last changed the schedule when a run fails. In a public repository, GitHub disables scheduled workflows after 60 days without commits, and the scheduled runs don't count. Turn it back on from the Actions tab.
+
 ## Development
 
 ```sh

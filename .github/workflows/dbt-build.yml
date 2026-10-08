@@ -1,0 +1,44 @@
+# Keeps the dbt archive in BigQuery growing. It does nothing until the
+# repository variable WEATHERNEXT_TABLE is set; see "Scheduled builds" in the
+# README. It only writes to BigQuery, never forecasts to GitHub.
+name: dbt build
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: dbt-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: vars.WEATHERNEXT_TABLE != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      WEATHERNEXT_TABLE: ${{ vars.WEATHERNEXT_TABLE }}
+      GOOGLE_CLOUD_PROJECT: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+      DBT_DATASET: ${{ vars.DBT_DATASET || 'weathernext_norway_wind' }}
+      DBT_LOCATION: ${{ vars.DBT_LOCATION || 'US' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          # Otherwise auth sets GOOGLE_CLOUD_PROJECT to the service account's
+          # project, and dbt would build and bill there.
+          project_id: ${{ vars.GOOGLE_CLOUD_PROJECT }}
+      - uses: astral-sh/setup-uv@v10.2.0
+      - run: uv sync --group dbt
+      # Runs with `set -e`, so a failed freshness check stops the build.
+      - name: Freshness and build
+        run: |
+          uv run dbt source freshness --project-dir dbt --profiles-dir dbt
+          uv run dbt build --project-dir dbt --profiles-dir dbt
